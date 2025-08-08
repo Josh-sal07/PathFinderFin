@@ -7,21 +7,22 @@
         padding: 0;
         height: 100%;
         background-color: black;
+        overflow: hidden;
     }
 
     #photo-viewer {
         position: relative;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: black;
     }
 
     #office-image {
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
         cursor: zoom-in;
         transition: opacity 0.4s ease-in-out;
@@ -38,32 +39,53 @@
         font-weight: bold;
         cursor: pointer;
         z-index: 10;
+        user-select: none;
     }
 
-    #prevBtn {
-        left: 20px;
-    }
-
-    #nextBtn {
-        right: 20px;
-    }
+    #prevBtn { left: 10px; }
+    #nextBtn { right: 10px; }
 
     #backBtn {
         position: absolute;
-        top: 20px;
-        left: 20px;
+        top: 10px;
+        left: 10px;
         background-color: rgba(255, 255, 255, 0.8);
         color: black;
-        padding: 8px 16px;
+        padding: 8px 12px;
         border-radius: 6px;
         font-weight: bold;
         text-decoration: none;
         z-index: 20;
-        transition: background-color 0.3s ease;
     }
 
     #backBtn:hover {
         background-color: rgba(255, 255, 255, 1);
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+        html, body, #photo-viewer {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #office-image {
+            max-width: 100vw;
+            max-height: 100vh;
+        }
+
+        .nav-btn {
+            padding: 10px 14px;
+            font-size: 18px;
+        }
+
+        #prevBtn { left: 5px; }
+        #nextBtn { right: 5px; }
+
+        #backBtn {
+            padding: 6px 10px;
+            font-size: 14px;
+        }
     }
 </style>
 
@@ -99,7 +121,7 @@
                 imageElement.src = '/storage/' + photos[currentIndex];
                 imageElement.onload = () => {
                     imageElement.style.opacity = 1;
-                    mediumZoom('.zoom-image'); // reapply zoom
+                    mediumZoom('.zoom-image'); 
                 };
             }, 200);
         }
@@ -118,11 +140,46 @@
             }
         });
 
+        // SWIPE FUNCTIONALITY
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        imageElement.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        imageElement.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // minimum distance to count as swipe
+            const swipeDistance = touchEndX - touchStartX;
+
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    // swipe right -> previous image
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateImage();
+                    }
+                } else {
+                    // swipe left -> next image
+                    if (currentIndex < photos.length - 1) {
+                        currentIndex++;
+                        updateImage();
+                    }
+                }
+            }
+        }
+
         mediumZoom('.zoom-image', {
-            margin: 24,
+            margin: 0,
             background: '#000',
             scrollOffset: 0,
         });
     });
 </script>
+
 @endsection
