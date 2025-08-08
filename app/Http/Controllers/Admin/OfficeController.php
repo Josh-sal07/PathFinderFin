@@ -54,8 +54,10 @@ public function store(Request $request)
 
 public function edit(Office $office)
 {
+     $office->load('photos');
     return view('admin.offices.edit', compact('office'));
 }
+
 
 public function update(Request $request, Office $office)
 {
@@ -67,39 +69,18 @@ public function update(Request $request, Office $office)
     $oldName = $office->name;
     $office->update(['name' => $validated['name']]);
 
-    // Rename folder if office name changed
-    if ($oldName !== $validated['name']) {
-        $oldFolder = public_path('offices/' . $oldName);
-        $newFolder = public_path('offices/' . $validated['name']);
+    // Rename folder if office name changed (optional, you may skip if using office ID folder)
+    // But since store uses office ID as folder name, no need to rename folders.
+    // If you want to keep office name folder, you'll need to switch store() as well.
 
-        if (File::exists($oldFolder)) {
-            File::move($oldFolder, $newFolder);
-        }
-
-        // Update paths in DB
-        foreach ($office->photos as $photo) {
-            $photo->update([
-                'photo_path' => str_replace("offices/$oldName", "offices/{$validated['name']}", $photo->photo_path)
-            ]);
-        }
-    }
-
-    // Upload new photos
+    // Upload new photos (match store() method: use storage disk 'public' and office ID folder)
     if ($request->hasFile('photos')) {
-        $folder = public_path('offices/' . $office->name);
+        foreach ($request->file('photos') as $photo) {
+            $path = $photo->store("offices/{$office->id}", 'public');
 
-        if (!File::exists($folder)) {
-            File::makeDirectory($folder, 0755, true);
-        }
-
-        foreach ($request->file('photos') as $index => $photo) {
-            $filename = 'step_' . time() . '_' . $index . '.' . $photo->getClientOriginalExtension();
-            $photo->move($folder, $filename);
-
-            // Save with the same column name used in store()
             OfficePhoto::create([
                 'office_id' => $office->id,
-                'photo_path' => 'offices/' . $office->name . '/' . $filename,
+                'photo_path' => $path,
             ]);
         }
     }

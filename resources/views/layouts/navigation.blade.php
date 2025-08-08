@@ -19,7 +19,7 @@
                 <div class="hidden sm:ml-10 sm:flex space-x-1">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="group relative">
                         {{ __('Manage Offices') }}
-                        <span class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" :class="{ 'scale-x-100': request()->routeIs('dashboard') }"></span>
+                        {{-- <span class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" :class="{ 'scale-x-100': request()->routeIs('dashboard') }"></span> --}}
                     </x-nav-link>
                     
                     <x-nav-link href="{{ route('admin.about') }}" :active="request()->routeIs('admin.about')" class="group relative">

@@ -51,30 +51,7 @@
             @enderror
         </div>
 
-        <!-- Current Photos -->
-        <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">Current Navigation Photos</label>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                @foreach ($office->photos as $photo)
-                    <div class="relative group">
-                        <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="Office Photo" 
-                             class="w-full h-40 object-cover rounded-lg border border-gray-200 shadow-sm">
-                        <form action="{{ route('admin.offices.delete-photo', $photo->id) }}" method="POST" 
-                              onsubmit="return confirm('Delete this photo?')" 
-                              class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                    class="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+       
 
         <!-- Add More Photos -->
         <div class="space-y-2">
@@ -109,5 +86,29 @@
             </button>
         </div>
     </form>
+    <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700 text-center">Current Navigation Photos</label>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                @foreach ($office->photos as $photo)
+                    <div class="relative group">
+                        <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="Office Photo" 
+                             class="w-full h-40 object-cover rounded-lg border border-gray-200 shadow-sm">
+                        <form action="{{ route('admin.offices.delete-photo', $photo->id) }}" method="POST" 
+                              onsubmit="return confirm('Delete this photo?')" 
+                              class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                    class="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                @endforeach
+            </div>
+        </div>              
+
 </div>
 @endsection
