@@ -25,12 +25,15 @@ Route::middleware('auth')->group(function () {
 Route::get('/dashboard', [OfficeController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+    
 
 // ✅ Admin Office Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::resource('offices', OfficeController::class);
     Route::delete('offices/photos/{photo}', [OfficeController::class, 'destroyPhoto'])->name('offices.delete-photo');
     Route::put('offices/{office}', [OfficeController::class, 'update'])->name('offices.update');
+    Route::view('/about', 'admin.about')->name('about');
+    Route::view('/contact', 'admin.contact')->name('contact');
 });
 
 // ✅ AR Scan Page
@@ -74,6 +77,7 @@ Route::get('/view-office/{id}', function ($id) {
     return app(OfficeViewerController::class)->show($id);
     
 })->name('user.view.office');
+
 
 
 

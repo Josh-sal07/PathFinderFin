@@ -86,9 +86,9 @@
                                         </div>
                                     </td>
                                     
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class=" px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <span class="text-sm text-gray-900 mr-2">{{ $office->photos->count() }}</span>
+                                            <span class="text-sm  text-gray-900 mr-2">{{ $office->photos->count() }}</span>
                                             @if($office->photos->count() > 0)
                                                 <div class="flex -space-x-3">
                                                     @if($office->photos->count() > 3)

@@ -22,12 +22,13 @@
                         <span class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" :class="{ 'scale-x-100': request()->routeIs('dashboard') }"></span>
                     </x-nav-link>
                     
-                    <x-nav-link href="#" class="group relative">
+                    <x-nav-link href="{{ route('admin.about') }}" :active="request()->routeIs('admin.about')" class="group relative">
                         {{ __('About') }}
                         <span class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
                     </x-nav-link>
+
                     
-                    <x-nav-link href="#" class="group relative">
+                     <x-nav-link href="{{ route('admin.contact') }}" :active="request()->routeIs('admin.contact')" class="group relative">
                         {{ __('Contact') }}
                         <span class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
                     </x-nav-link>
