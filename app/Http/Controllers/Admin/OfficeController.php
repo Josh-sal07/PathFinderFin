@@ -8,6 +8,7 @@ use App\Models\Office;
 use App\Models\OfficePhoto;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class OfficeController extends Controller
 {
     /**
@@ -47,6 +48,22 @@ public function store(Request $request)
                 ]);
             }
         }
+  
+
+      $qrContent = route('dashboard', $office->id); // Your target link or text
+    $qrCodeSvg = QrCode::format('svg')
+        ->size(300)
+        ->errorCorrection('H')
+        ->generate($qrContent);
+
+    // Save QR code file
+    $qrPath = "qrcodes/office-{$office->id}.svg";
+    Storage::disk('public')->put($qrPath, $qrCodeSvg);
+
+    // Save path to DB
+    $office->qr_code = $qrPath;
+    $office->save();
+
 
         return redirect()->route('dashboard')->with('success', 'Office created successfully!');
     }
